@@ -25,7 +25,7 @@ export default function Task({ task, deleteProp }: Prop) {
     <div className="bg-stone-200 p-3 mb-4 " ref={setNodeRef} style={style}>
       <div className="hover:cursor-pointer" {...listeners} {...attributes}>
         <h4 className="pb-3.5 font-bold">{task.title}</h4>
-        <p>{task.desctiption}</p>
+        <p>{task.description}</p>
       </div>
       <button className="bg-red-300" onClick={deleteTask}>
         delete
