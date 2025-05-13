@@ -3,7 +3,7 @@ import { taskType } from "../dataTypes/taskType";
 
 var newTask: taskType = {
   title: "",
-  desctiption: "",
+  description: "",
   id: getRandomIntInclusive(1, 1000),
   status: "Backlog",
 };
@@ -28,7 +28,7 @@ export default function NewTask({ addFunction }: Prop) {
         break;
       }
       case "description": {
-        setInput({ ...input, ...{ desctiption: event.target.value } });
+        setInput({ ...input, ...{ description: event.target.value } });
         break;
       }
     }
@@ -40,7 +40,7 @@ export default function NewTask({ addFunction }: Prop) {
       // ...input,
 
       title: "",
-      desctiption: "",
+      description: "",
       id: getRandomIntInclusive(1, 1000),
       status: "Backlog",
     });
@@ -62,7 +62,7 @@ export default function NewTask({ addFunction }: Prop) {
         type="text"
         className="bg-white w-90 text-black"
         name="description"
-        value={String(input.desctiption)}
+        value={String(input.description)}
         placeholder="description"
         onChange={clickHandler}
       />
