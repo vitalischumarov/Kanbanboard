@@ -3,7 +3,7 @@ import Board from "./components/Board";
 import NewTask from "./components/NewTask";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { UniqueIdentifier } from "@dnd-kit/core";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { taskType } from "./dataTypes/taskType";
 import { createClient, Session } from "@supabase/supabase-js";
 import Login from "./components/Login";
@@ -17,7 +17,7 @@ const boards: UniqueIdentifier[] = ["Backlog", "In Progress", "Done"];
 
 function App() {
   const [tasks, setTasks] = useState<taskType[]>([]);
-  const [user, setUser] = useState("");
+  const user = useRef("");
   const [session, setSession] = useState<any>(null);
 
   useEffect(() => {});
@@ -127,8 +127,8 @@ function App() {
     const currentSession = await supabase.auth.getSession();
     setSession(currentSession.data.session);
     console.log("das ist die aktuelle Session:");
-    console.log(currentSession);
-    setUser(String(currentSession.data.session?.user.email));
+    user.current = String(currentSession.data.session?.user.email);
+    console.log(user);
   };
 
   async function signOut() {
@@ -143,7 +143,7 @@ function App() {
         <button className="bg-white" onClick={signOut}>
           Sign Out
         </button>
-        <NewTask user={user} addFunction={addNewTask}></NewTask>
+        <NewTask user={String(user.current)} addFunction={addNewTask}></NewTask>
         <DndContext onDragEnd={handleDragEnd}>
           <div className=" flex justify-center gap-50">
             {boards.map((board) => {

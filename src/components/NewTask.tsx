@@ -1,14 +1,6 @@
 import { useState } from "react";
 import { taskType } from "../dataTypes/taskType";
 
-var newTask: taskType = {
-  title: "",
-  description: "",
-  id: getRandomIntInclusive(1, 1000),
-  status: "Backlog",
-  owner: "",
-};
-
 type Prop = {
   addFunction: (item: taskType) => void;
   user: String;
@@ -21,6 +13,14 @@ function getRandomIntInclusive(min: number, max: number) {
 }
 
 export default function NewTask({ addFunction, user }: Prop) {
+  var newTask: taskType = {
+    title: "",
+    description: "",
+    id: getRandomIntInclusive(1, 1000),
+    status: "Backlog",
+    owner: user,
+  };
+
   const [input, setInput] = useState(newTask);
 
   function clickHandler(event: React.ChangeEvent<HTMLInputElement>) {
@@ -43,7 +43,7 @@ export default function NewTask({ addFunction, user }: Prop) {
       description: "",
       id: getRandomIntInclusive(1, 1000),
       status: "Backlog",
-      owner: user,
+      owner: "",
     });
     console.log("reseted input");
     console.table(input);
