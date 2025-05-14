@@ -5,20 +5,22 @@ import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { UniqueIdentifier } from "@dnd-kit/core";
 import { useState, useEffect } from "react";
 import { taskType } from "./dataTypes/taskType";
-import { createClient } from "@supabase/supabase-js";
+import { createClient, Session } from "@supabase/supabase-js";
+import Login from "./components/Login";
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_TOKEN;
 
-console.log("URL:", import.meta.env.VITE_SUPABASE_URL);
-console.log("Token:", import.meta.env.VITE_SUPABASE_TOKEN);
-
-const supabase = createClient(supabaseUrl, supabaseKey);
+export const supabase = createClient(supabaseUrl, supabaseKey);
 
 const boards: UniqueIdentifier[] = ["Backlog", "In Progress", "Done"];
 
 function App() {
   const [tasks, setTasks] = useState<taskType[]>([]);
+  const [user, setUser] = useState("");
+  const [session, setSession] = useState<any>(null);
+
+  useEffect(() => {});
 
   async function updateTask(task: taskType) {
     const { error } = await supabase
@@ -59,14 +61,6 @@ function App() {
     }
     return [];
   }
-
-  useEffect(() => {
-    async function fetchData() {
-      const loadedTasks = await loadDataFromDB();
-      setTasks(loadedTasks || []);
-    }
-    fetchData();
-  }, []);
 
   function handleDragEnd(event: DragEndEvent) {
     const { over, active } = event;
@@ -114,25 +108,59 @@ function App() {
     setTasks((prev) => [...prev, item]);
   }
 
-  return (
-    <div className="bg-stone-900 h-screen">
-      <NewTask addFunction={addNewTask}></NewTask>
-      <DndContext onDragEnd={handleDragEnd}>
-        <div className=" flex justify-center gap-50">
-          {boards.map((board) => {
-            return (
-              <Board
-                boardStatus={board}
-                tasks={tasks}
-                key={board}
-                deleteTask={deleteTask}
-              ></Board>
-            );
-          })}
-        </div>
-      </DndContext>
-    </div>
-  );
+  useEffect(() => {
+    fetchUser();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setSession(session);
+      }
+    );
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
+
+  const fetchUser = async () => {
+    //hier mit werden die Daten des eingeloggten Usert gezogen
+    const currentSession = await supabase.auth.getSession();
+    setSession(currentSession.data.session);
+    console.log("das ist die aktuelle Session:");
+    console.log(currentSession);
+    setUser(String(currentSession.data.session?.user.email));
+  };
+
+  async function signOut() {
+    await supabase.auth.signOut();
+  }
+
+  if (session === null) {
+    return <Login fetchUser={fetchUser}></Login>;
+  } else {
+    return (
+      <div className="bg-stone-900 h-screen">
+        <button className="bg-white" onClick={signOut}>
+          Sign Out
+        </button>
+        <NewTask user={user} addFunction={addNewTask}></NewTask>
+        <DndContext onDragEnd={handleDragEnd}>
+          <div className=" flex justify-center gap-50">
+            {boards.map((board) => {
+              return (
+                <Board
+                  boardStatus={board}
+                  tasks={tasks}
+                  key={board}
+                  deleteTask={deleteTask}
+                ></Board>
+              );
+            })}
+          </div>
+        </DndContext>
+      </div>
+    );
+  }
 }
 
 export default App;

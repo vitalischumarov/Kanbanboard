@@ -5,4 +5,5 @@ export type taskType = {
   title: String;
   description: String;
   status: String;
+  owner: String;
 };
