@@ -5,7 +5,7 @@ import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { UniqueIdentifier } from "@dnd-kit/core";
 import { useState, useEffect, useRef } from "react";
 import { taskType } from "./dataTypes/taskType";
-import { createClient, Session } from "@supabase/supabase-js";
+import { createClient } from "@supabase/supabase-js";
 import Login from "./components/Login";
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -51,7 +51,10 @@ function App() {
   }
 
   async function loadDataFromDB() {
-    const { error, data } = await supabase.from("kanbanTasks").select("*");
+    const { error, data } = await supabase
+      .from("kanbanTasks")
+      .select("*")
+      .eq("owner", user.current);
     if (error) {
       console.log(error);
       return [];
@@ -114,6 +117,7 @@ function App() {
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setSession(session);
+        user.current = String(session?.user.email);
       }
     );
 
@@ -126,13 +130,14 @@ function App() {
     //hier mit werden die Daten des eingeloggten Usert gezogen
     const currentSession = await supabase.auth.getSession();
     setSession(currentSession.data.session);
-    console.log("das ist die aktuelle Session:");
-    user.current = String(currentSession.data.session?.user.email);
-    console.log(user);
+    // user.current = String(currentSession.data.session?.user.email);
+    // console.log(`der user nach dem fetchen hat den Wert ${user.current}`);
+    setTasks(await loadDataFromDB());
   };
 
   async function signOut() {
     await supabase.auth.signOut();
+    user.current = "";
   }
 
   if (session === null) {
@@ -143,7 +148,8 @@ function App() {
         <button className="bg-white" onClick={signOut}>
           Sign Out
         </button>
-        <NewTask user={String(user.current)} addFunction={addNewTask}></NewTask>
+        <h2 className="text-white">{user.current}</h2>
+        <NewTask user={user.current} addFunction={addNewTask}></NewTask>
         <DndContext onDragEnd={handleDragEnd}>
           <div className=" flex justify-center gap-50">
             {boards.map((board) => {
