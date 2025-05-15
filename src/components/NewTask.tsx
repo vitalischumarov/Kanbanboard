@@ -1,15 +1,9 @@
 import { useState } from "react";
 import { taskType } from "../dataTypes/taskType";
 
-var newTask: taskType = {
-  title: "",
-  description: "",
-  id: getRandomIntInclusive(1, 1000),
-  status: "Backlog",
-};
-
 type Prop = {
   addFunction: (item: taskType) => void;
+  user: string;
 };
 
 function getRandomIntInclusive(min: number, max: number) {
@@ -18,8 +12,25 @@ function getRandomIntInclusive(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-export default function NewTask({ addFunction }: Prop) {
-  const [input, setInput] = useState(newTask);
+export default function NewTask({ addFunction, user }: Prop) {
+  // var newTask: taskType = {
+  //   title: "",
+  //   description: "",
+  //   id: getRandomIntInclusive(1, 1000),
+  //   status: "Backlog",
+  //   owner: user,
+  // };
+
+  const [input, setInput] = useState({
+    title: "",
+    description: "",
+    id: getRandomIntInclusive(1, 1000),
+    status: "Backlog",
+    owner: user,
+  });
+
+  console.log(`dies ist der initialwert eines Tasks`);
+  console.table(input);
 
   function clickHandler(event: React.ChangeEvent<HTMLInputElement>) {
     switch (event.target.name) {
@@ -37,12 +48,11 @@ export default function NewTask({ addFunction }: Prop) {
   function addNewTask() {
     addFunction(input);
     setInput({
-      // ...input,
-
       title: "",
       description: "",
       id: getRandomIntInclusive(1, 1000),
       status: "Backlog",
+      owner: user,
     });
     console.log("reseted input");
     console.table(input);

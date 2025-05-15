@@ -30,18 +30,20 @@ export default function Board({ boardStatus, tasks, deleteTask }: boardProps) {
   }
 
   return (
-    <div className={`h-full mt-10 w-62`} ref={setNodeRef}>
-      <h3 className={`text-amber-50 ${hoverEffect} p-6 text-center`}>
-        {boardStatus}
-      </h3>
-      <div className={`${boardColor} p-5`}>
-        {tasks.map((task) => {
-          if (task.status === boardStatus) {
-            return (
-              <Task task={task} key={task.id} deleteProp={deleteTask}></Task>
-            );
-          }
-        })}
+    <div>
+      <div className={`h-full mt-10 w-62`} ref={setNodeRef}>
+        <h3 className={`text-amber-50 ${hoverEffect} p-6 text-center`}>
+          {boardStatus}
+        </h3>
+        <div className={`${boardColor} p-5`}>
+          {tasks.map((task) => {
+            if (task.status === boardStatus) {
+              return (
+                <Task task={task} key={task.id} deleteProp={deleteTask}></Task>
+              );
+            }
+          })}
+        </div>
       </div>
     </div>
   );
