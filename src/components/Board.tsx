@@ -39,7 +39,7 @@ export default function Board({ boardStatus, tasks, deleteTask }: boardProps) {
 
   return (
     <div>
-      <div className={`h-full mt-10 w-65 rounded-2xl`} ref={setNodeRef}>
+      <div className={`h-full mt-10 w-95 rounded-2xl`} ref={setNodeRef}>
         <h3 className={`text-amber-50 ${hoverEffect} p-3 text-center`}>
           {boardStatus}
         </h3>

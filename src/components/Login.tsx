@@ -141,6 +141,11 @@ export default function Login({ fetchUser }: iFetchUser) {
               >
                 Anmelden
               </button>
+              <h4 className="text-gray-400">
+                Info: Wenn Sie sich nicht registrieren aber die Application
+                gerne testen wollen, können Sie sehr gerne die vordefinierten
+                LogIn Daten verwenden.
+              </h4>
             </div>
           ) : (
             <div className="space-y-4">
