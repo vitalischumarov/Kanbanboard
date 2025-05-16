@@ -10,29 +10,37 @@ type boardProps = {
 };
 
 let boardColor: String;
+let headerBoardColor: String;
+let headerBoardColorHover: String;
 
 export default function Board({ boardStatus, tasks, deleteTask }: boardProps) {
-  let hoverEffect = "bg-stone-600";
+  let hoverEffect = headerBoardColor;
   const { isOver, setNodeRef } = useDroppable({
     id: boardStatus,
   });
 
   if (isOver) {
-    hoverEffect = "bg-stone-500";
+    hoverEffect = headerBoardColorHover;
   }
 
   if (boardStatus === "In Progress") {
     boardColor = "bg-blue-300";
+    headerBoardColor = "bg-blue-500";
+    headerBoardColorHover = "bg-blue-400";
   } else if (boardStatus === "Done") {
     boardColor = "bg-green-300";
+    headerBoardColor = "bg-green-500";
+    headerBoardColorHover = "bg-green-400";
   } else if (boardStatus === "Backlog") {
     boardColor = "bg-gray-300";
+    headerBoardColor = "bg-gray-500";
+    headerBoardColorHover = "bg-gray-400";
   }
 
   return (
     <div>
-      <div className={`h-full mt-10 w-62`} ref={setNodeRef}>
-        <h3 className={`text-amber-50 ${hoverEffect} p-6 text-center`}>
+      <div className={`h-full mt-10 w-65 rounded-2xl`} ref={setNodeRef}>
+        <h3 className={`text-amber-50 ${hoverEffect} p-3 text-center`}>
           {boardStatus}
         </h3>
         <div className={`${boardColor} p-5`}>
