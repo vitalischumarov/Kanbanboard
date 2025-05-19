@@ -12,6 +12,7 @@ type boardProps = {
 let boardColor: String;
 let headerBoardColor: String;
 let headerBoardColorHover: String;
+let isOverElement: Boolean;
 
 export default function Board({ boardStatus, tasks, deleteTask }: boardProps) {
   let hoverEffect = headerBoardColor;
@@ -20,6 +21,7 @@ export default function Board({ boardStatus, tasks, deleteTask }: boardProps) {
   });
 
   if (isOver) {
+    isOverElement = isOver;
     hoverEffect = headerBoardColorHover;
   }
 
@@ -37,10 +39,16 @@ export default function Board({ boardStatus, tasks, deleteTask }: boardProps) {
     headerBoardColorHover = "bg-gray-400";
   }
 
+  // ${headerBoardColor} ${hoverEffect}
+
   return (
     <div>
       <div className={`h-full mt-10 w-95 rounded-2xl`} ref={setNodeRef}>
-        <h3 className={`text-amber-50 ${hoverEffect} p-3 text-center`}>
+        <h3
+          className={`text-amber-50  ${
+            isOverElement ? hoverEffect : headerBoardColor
+          }  p-3 text-center`}
+        >
           {boardStatus}
         </h3>
         <div className={`${boardColor} p-5`}>
