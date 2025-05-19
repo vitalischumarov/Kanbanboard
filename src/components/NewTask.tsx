@@ -35,7 +35,7 @@ export default function NewTask({ addFunction, user }: Prop) {
   }
 
   function addNewTask() {
-    if (!input.title.trim()) return; // Verhindert leere Tasks
+    if (!input.title.trim()) return;
 
     addFunction(input);
     setInput({

@@ -40,6 +40,7 @@ export default function Login({ fetchUser }: iFetchUser) {
     });
     if (error) {
       console.log(`error: ${error}`);
+      alert("E-Mail oder Passwort sind falsch");
       return;
     }
     if (data) {
