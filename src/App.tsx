@@ -141,7 +141,7 @@ function App() {
     return <Login fetchUser={fetchUser}></Login>;
   } else {
     return (
-      <div className="bg-stone-900 h-screen">
+      <div className="bg-stone-900 h-dvw">
         <div className="flex items-center gap-4">
           <div className="text-sm text-gray-300">
             Eingeloggt als: {}
